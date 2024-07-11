@@ -84,8 +84,6 @@ pub struct RendezvousServer {
 
 enum LoopFailure {
     UdpSocket,
-    Listener3,
-    Listener2,
     Listener,
 }
 
@@ -93,14 +91,10 @@ impl RendezvousServer {
     #[tokio::main(flavor = "multi_thread")]
     pub async fn start(port: i32, serial: i32, key: &str, rmem: usize) -> ResultType<()> {
         let (key, sk) = Self::get_server_sk(key);
-        let nat_port = port - 1;
-        let ws_port = port + 2;
         let pm = PeerMap::new().await?;
         log::info!("serial={}", serial);
         let rendezvous_servers = get_servers(&get_arg("rendezvous-servers"), "rendezvous-servers");
         log::info!("Listening on tcp/udp :{}", port);
-        log::info!("Listening on tcp :{}, extra port for NAT test", nat_port);
-        log::info!("Listening on websocket :{}", ws_port);
         let mut socket = create_udp_listener(port, rmem).await?;
         let (tx, mut rx) = mpsc::unbounded_channel::<Data>();
         let software_url = get_arg("software-url");
@@ -140,8 +134,6 @@ impl RendezvousServer {
         std::env::set_var("PORT_FOR_API", port.to_string());
         rs.parse_relay_servers(&get_arg("relay-servers"));
         let mut listener = create_tcp_listener(port).await?;
-        let mut listener2 = create_tcp_listener(nat_port).await?;
-        let mut listener3 = create_tcp_listener(ws_port).await?;
         let test_addr = std::env::var("TEST_HBBS").unwrap_or_default();
         if std::env::var("ALWAYS_USE_RELAY")
             .unwrap_or_default()
@@ -187,8 +179,6 @@ impl RendezvousServer {
                     .io_loop(
                         &mut rx,
                         &mut listener,
-                        &mut listener2,
-                        &mut listener3,
                         &mut socket,
                         &key,
                     )
@@ -201,14 +191,6 @@ impl RendezvousServer {
                     LoopFailure::Listener => {
                         drop(listener);
                         listener = create_tcp_listener(port).await?;
-                    }
-                    LoopFailure::Listener2 => {
-                        drop(listener2);
-                        listener2 = create_tcp_listener(nat_port).await?;
-                    }
-                    LoopFailure::Listener3 => {
-                        drop(listener3);
-                        listener3 = create_tcp_listener(ws_port).await?;
                     }
                 }
             }
@@ -224,8 +206,6 @@ impl RendezvousServer {
         &mut self,
         rx: &mut Receiver,
         listener: &mut TcpListener,
-        listener2: &mut TcpListener,
-        listener3: &mut TcpListener,
         socket: &mut FramedSocket,
         key: &str,
     ) -> LoopFailure {
@@ -262,30 +242,6 @@ impl RendezvousServer {
                         }
                         None => {
                             // unreachable!() ?
-                        }
-                    }
-                }
-                res = listener2.accept() => {
-                    match res {
-                        Ok((stream, addr))  => {
-                            stream.set_nodelay(true).ok();
-                            self.handle_listener2(stream, addr).await;
-                        }
-                        Err(err) => {
-                           log::error!("listener2.accept failed: {}", err);
-                           return LoopFailure::Listener2;
-                        }
-                    }
-                }
-                res = listener3.accept() => {
-                    match res {
-                        Ok((stream, addr))  => {
-                            stream.set_nodelay(true).ok();
-                            self.handle_listener(stream, addr, key, true).await;
-                        }
-                        Err(err) => {
-                           log::error!("listener3.accept failed: {}", err);
-                           return LoopFailure::Listener3;
                         }
                     }
                 }
@@ -1052,45 +1008,6 @@ impl RendezvousServer {
             _ => {}
         }
         res
-    }
-
-    async fn handle_listener2(&self, stream: TcpStream, addr: SocketAddr) {
-        let mut rs = self.clone();
-        if addr.ip().is_loopback() {
-            tokio::spawn(async move {
-                let mut stream = stream;
-                let mut buffer = [0; 1024];
-                if let Ok(Ok(n)) = timeout(1000, stream.read(&mut buffer[..])).await {
-                    if let Ok(data) = std::str::from_utf8(&buffer[..n]) {
-                        let res = rs.check_cmd(data).await;
-                        stream.write(res.as_bytes()).await.ok();
-                    }
-                }
-            });
-            return;
-        }
-        let stream = FramedStream::from(stream, addr);
-        tokio::spawn(async move {
-            let mut stream = stream;
-            if let Some(Ok(bytes)) = stream.next_timeout(30_000).await {
-                if let Ok(msg_in) = RendezvousMessage::parse_from_bytes(&bytes) {
-                    match msg_in.union {
-                        Some(rendezvous_message::Union::TestNatRequest(_)) => {
-                            let mut msg_out = RendezvousMessage::new();
-                            msg_out.set_test_nat_response(TestNatResponse {
-                                port: addr.port() as _,
-                                ..Default::default()
-                            });
-                            stream.send(&msg_out).await.ok();
-                        }
-                        Some(rendezvous_message::Union::OnlineRequest(or)) => {
-                            allow_err!(rs.handle_online_request(&mut stream, or.peers).await);
-                        }
-                        _ => {}
-                    }
-                }
-            }
-        });
     }
 
     async fn handle_listener(&self, stream: TcpStream, addr: SocketAddr, key: &str, ws: bool) {
