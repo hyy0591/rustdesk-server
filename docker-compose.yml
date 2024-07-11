@@ -8,10 +8,8 @@ services:
   hbbs:
     container_name: hbbs
     ports:
-      - 17036:17036
       - 17037:17037
       - 17037:17037/udp
-      - 17039:17039
     image: rustdesk/rustdesk-server:latest
     command: hbbs -r rustdesk.example.com:17038
     volumes:
@@ -26,7 +24,6 @@ services:
     container_name: hbbr
     ports:
       - 17038:17038
-      - 17040:17040
     image: rustdesk/rustdesk-server:latest
     command: hbbr
     volumes:

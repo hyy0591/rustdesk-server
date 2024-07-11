@@ -80,12 +80,10 @@ pub async fn start(port: &str, key: &str) -> ResultType<()> {
     );
     let port: u16 = port.parse()?;
     log::info!("Listening on tcp :{}", port);
-    let port2 = port + 2;
-    log::info!("Listening on websocket :{}", port2);
     let main_task = async move {
         loop {
             log::info!("Start");
-            io_loop(listen_any(port, true).await?, listen_any(port2, true).await?, &key).await;
+            io_loop(listen_any(port, true).await?, &key).await;
         }
     };
     let listen_signal = crate::common::listen_signal();
@@ -323,7 +321,7 @@ async fn check_cmd(cmd: &str, limiter: Limiter) -> String {
     res
 }
 
-async fn io_loop(listener: TcpListener, listener2: TcpListener, key: &str) {
+async fn io_loop(listener: TcpListener, key: &str) {
     check_params();
     let limiter = <Limiter>::new(TOTAL_BANDWIDTH.load(Ordering::SeqCst) as _);
     loop {
@@ -336,18 +334,6 @@ async fn io_loop(listener: TcpListener, listener2: TcpListener, key: &str) {
                     }
                     Err(err) => {
                        log::error!("listener.accept failed: {}", err);
-                       break;
-                    }
-                }
-            }
-            res = listener2.accept() => {
-                match res {
-                    Ok((stream, addr))  => {
-                        stream.set_nodelay(true).ok();
-                        handle_connection(stream, addr, &limiter, key, true).await;
-                    }
-                    Err(err) => {
-                       log::error!("listener2.accept failed: {}", err);
                        break;
                     }
                 }
