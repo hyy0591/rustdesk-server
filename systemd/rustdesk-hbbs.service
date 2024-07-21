@@ -1,17 +1,17 @@
 
 [Unit]
-Description=Rustdesk Signal Server
+Description=CscpAssist Controller Server
 
 [Service]
 Type=simple
 LimitNOFILE=1000000
-ExecStart=/usr/bin/hbbs
-WorkingDirectory=/var/lib/rustdesk-server/
+ExecStart=/usr/bin/cscpassist-controller
+WorkingDirectory=/var/lib/cscpassist-server/
 User=
 Group=
 Restart=always
-StandardOutput=append:/var/log/rustdesk-server/hbbs.log
-StandardError=append:/var/log/rustdesk-server/hbbs.error
+StandardOutput=append:/var/log/cscpassist-server/cscpassist-controller.log
+StandardError=append:/var/log/cscpassist-server/cscpassist-controller.error
 # Restart service after 10 seconds if node service crashes
 RestartSec=10
 

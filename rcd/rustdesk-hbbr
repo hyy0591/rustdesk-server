@@ -1,64 +1,64 @@
 #!/bin/sh
 
-# PROVIDE: rustdesk_hbbr
+# PROVIDE: cscpassist_intermediary
 # REQUIRE: LOGIN
 # KEYWORD: shutdown
 #
 # Add the following lines to /etc/rc.conf.local or /etc/rc.conf
 # to enable this service:
 #
-# rustdesk_hbbr_enable (bool):            Set to NO by default.
-#               Set it to YES to enable rustdesk_hbbr.
-# rustdesk_hbbr_args (string):            Set extra arguments to pass to rustdesk_hbbr
+# cscpassist_intermediary_enable (bool):            Set to NO by default.
+#               Set it to YES to enable cscpassist_intermediary.
+# cscpassist_intermediary_args (string):            Set extra arguments to pass to cscpassist_intermediary
 #               Default is "-k _".
-# rustdesk_hbbr_user (string):            Set user that rustdesk_hbbr will run under
+# cscpassist_intermediary_user (string):            Set user that cscpassist_intermediary will run under
 #               Default is "root".
-# rustdesk_hbbr_group (string):           Set group that rustdesk_hbbr will run under
+# cscpassist_intermediary_group (string):           Set group that cscpassist_intermediary will run under
 #               Default is "wheel".
 
 . /etc/rc.subr
 
-name=rustdesk_hbbr
-desc="Rustdesk Relay Server"
-rcvar=rustdesk_hbbr_enable
+name=cscpassist_intermediary
+desc="CscpAssist Intermediary Server"
+rcvar=cscpassist_intermediary_enable
 
 load_rc_config $name
 
-: ${rustdesk_hbbr_enable:=NO}
-: ${rustdesk_hbbr_args="-k _"}
-: ${rustdesk_hbbr_user:=rustdesk}
-: ${rustdesk_hbbr_group:=rustdesk}
+: ${cscpassist_intermediary_enable:=NO}
+: ${cscpassist_intermediary_args="-k _"}
+: ${cscpassist_intermediary_user:=cscpassist}
+: ${cscpassist_intermediary_group:=cscpassist}
 
-pidfile=/var/run/rustdesk_hbbr.pid
+pidfile=/var/run/cscpassist_intermediary.pid
 command=/usr/sbin/daemon
-procname=/usr/local/sbin/hbbr
-rustdesk_hbbr_chdir=/var/db/rustdesk-server
-command_args="-p ${pidfile} -o /var/log/rustdesk-hbbr.log ${procname} ${rustdesk_hbbr_args}"
+procname=/usr/local/sbin/cscpassist-intermediary
+cscpassist_intermediary_chdir=/var/db/cscpassist-server
+command_args="-p ${pidfile} -o /var/log/cscpassist-intermediary.log ${procname} ${cscpassist_intermediary_args}"
 ## If you want the daemon do its log over syslog comment out the above line and remove the comment from the below replacement
-#command_args="-p ${pidfile} -T ${name} ${procname} ${rustdesk_hbbr_args}"
+#command_args="-p ${pidfile} -T ${name} ${procname} ${cscpassist_intermediary_args}"
 
-start_precmd=rustdesk_hbbr_startprecmd
+start_precmd=cscpassist_intermediary_startprecmd
 
-rustdesk_hbbr_startprecmd()
+cscpassist_intermediary_startprecmd()
 {
     if [ -e ${pidfile} ]; then
-        chown ${rustdesk_hbbr_user}:${rustdesk_hbbr_group} ${pidfile};
+        chown ${cscpassist_intermediary_user}:${cscpassist_intermediary_group} ${pidfile};
     else
-        install -o ${rustdesk_hbbr_user} -g ${rustdesk_hbbr_group} /dev/null ${pidfile};
+        install -o ${cscpassist_intermediary_user} -g ${cscpassist_intermediary_group} /dev/null ${pidfile};
     fi
-    if [ -e ${rustdesk_hbbr_chdir} ]; then
-        chown -R ${rustdesk_hbbr_user}:${rustdesk_hbbr_group} ${rustdesk_hbbr_chdir};
-        chmod -R 770 ${rustdesk_hbbr_chdir};
+    if [ -e ${cscpassist_intermediary_chdir} ]; then
+        chown -R ${cscpassist_intermediary_user}:${cscpassist_intermediary_group} ${cscpassist_intermediary_chdir};
+        chmod -R 770 ${cscpassist_intermediary_chdir};
     else
-        mkdir -m 770 ${rustdesk_hbbr_chdir};
-        chown ${rustdesk_hbbr_user}:${rustdesk_hbbr_group} ${rustdesk_hbbr_chdir};
+        mkdir -m 770 ${cscpassist_intermediary_chdir};
+        chown ${cscpassist_intermediary_user}:${cscpassist_intermediary_group} ${cscpassist_intermediary_chdir};
     fi
-    if [ -e /var/log/rustdesk-hbbr.log ]; then
-        chown -R ${rustdesk_hbbr_user}:${rustdesk_hbbr_group} /var/log/rustdesk-hbbr.log;
-        chmod 660 /var/log/rustdesk-hbbr.log;
+    if [ -e /var/log/cscpassist-intermediary.log ]; then
+        chown -R ${cscpassist_intermediary_user}:${cscpassist_intermediary_group} /var/log/cscpassist-intermediary.log;
+        chmod 660 /var/log/cscpassist-intermediary.log;
     else
-        install -o ${rustdesk_hbbr_user} -g ${rustdesk_hbbr_group} /dev/null /var/log/rustdesk-hbbr.log;
-        chmod 660 /var/log/rustdesk-hbbr.log;
+        install -o ${cscpassist_intermediary_user} -g ${cscpassist_intermediary_group} /dev/null /var/log/cscpassist-intermediary.log;
+        chmod 660 /var/log/cscpassist-intermediary.log;
     fi
 }
 

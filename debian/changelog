@@ -1,34 +1,34 @@
-rustdesk-server (1.1.11-1) UNRELEASED; urgency=medium
+cscpassist-server (1.1.11-1) UNRELEASED; urgency=medium
   * set reuse port to make restart friendly
   * revert hbbr `-k` to not ruin back-compatibility
 
-rustdesk-server (1.1.11) UNRELEASED; urgency=medium
+cscpassist-server (1.1.11) UNRELEASED; urgency=medium
   * change -k to default '-', so you need not to set -k any more
 
-rustdesk-server (1.1.10-3) UNRELEASED; urgency=medium
+cscpassist-server (1.1.10-3) UNRELEASED; urgency=medium
   * fix on -2
 
-rustdesk-server (1.1.10-2) UNRELEASED; urgency=medium
+cscpassist-server (1.1.10-2) UNRELEASED; urgency=medium
 
   * fix hangup signal exit when run with nohup
   * some minors
 
-rustdesk-server (1.1.9) UNRELEASED; urgency=medium
+cscpassist-server (1.1.9) UNRELEASED; urgency=medium
 
   * remove unsafe
 
-rustdesk-server (1.1.8) UNRELEASED; urgency=medium
+cscpassist-server (1.1.8) UNRELEASED; urgency=medium
 
   * fix test_hbbs and mask in lan
 
-rustdesk-server (1.1.7) UNRELEASED; urgency=medium
+cscpassist-server (1.1.7) UNRELEASED; urgency=medium
 
   * ipv6 support
 
- -- rustdesk <info@rustdesk.com>  Wed, 11 Jan 2023 11:27:00 +0800
+ -- cscpassist <cscp-team@psbcsrdc.com>  Wed, 11 Jan 2023 11:27:00 +0800
 
-rustdesk-server (1.1.6) UNRELEASED; urgency=medium
+cscpassist-server (1.1.6) UNRELEASED; urgency=medium
 
   * Initial release
 
- -- open-trade <info@rustdesk.com>  Fri, 15 Jul 2022 12:27:27 +0200
+ -- open-trade <cscp-team@psbcsrdc.com>  Fri, 15 Jul 2022 12:27:27 +0200

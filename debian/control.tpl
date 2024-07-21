@@ -1,27 +1,27 @@
-Source: rustdesk-server
+Source: cscpassist-server
 Section: net
 Priority: optional
-Maintainer: open-trade <info@rustdesk.com>
+Maintainer: open-trade <cscp-team@psbcsrdc.com>
 Build-Depends: debhelper (>= 10), pkg-config
 Standards-Version: 4.5.0
-Homepage: https://rustdesk.com/
+Homepage: https://assist.cscp.psbc.com/
 
-Package: rustdesk-server-hbbs
+Package: cscpassist-server-controller
 Architecture: {{ ARCH }}
 Depends: systemd ${misc:Depends}
-Description: RustDesk server
- Self-host your own RustDesk server, it is free and open source.
+Description: CscpAssist server
+ Self-host your own CscpAssist server, it is free and open source.
 
-Package: rustdesk-server-hbbr
+Package: cscpassist-server-intermediary
 Architecture: {{ ARCH }}
 Depends: systemd ${misc:Depends}
-Description: RustDesk server
- Self-host your own RustDesk server, it is free and open source.
- This package contains the RustDesk relay server.
+Description: CscpAssist server
+ Self-host your own CscpAssist server, it is free and open source.
+ This package contains the CscpAssist intermediary server.
 
-Package: rustdesk-server-utils
+Package: cscpassist-server-utils
 Architecture: {{ ARCH }}
 Depends: ${misc:Depends}
-Description: RustDesk server
- Self-host your own RustDesk server, it is free and open source.
- This package contains the rustdesk-utils binary.
+Description: CscpAssist server
+ Self-host your own CscpAssist server, it is free and open source.
+ This package contains the cscpassist-utils binary.

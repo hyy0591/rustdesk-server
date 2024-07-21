@@ -1,33 +1,33 @@
 version: '3'
 
 networks:
-  rustdesk-net:
+  cscpassist-net:
     external: false
 
 services:
-  hbbs:
-    container_name: hbbs
+  cscpassist-controller:
+    container_name: cscpassist-controller
     ports:
       - 17037:17037
       - 17037:17037/udp
-    image: rustdesk/rustdesk-server:latest
-    command: hbbs -r rustdesk.example.com:17038
+    image: cscpassist/cscpassist-server:latest
+    command: cscpassist-controller -r cscpassist.example.com:17038
     volumes:
       - ./data:/root
     networks:
-      - rustdesk-net
+      - cscpassist-net
     depends_on:
-      - hbbr
+      - cscpassist-intermediary
     restart: unless-stopped
 
-  hbbr:
-    container_name: hbbr
+  cscpassist-intermediary:
+    container_name: cscpassist-intermediary
     ports:
       - 17038:17038
-    image: rustdesk/rustdesk-server:latest
-    command: hbbr
+    image: cscpassist/cscpassist-server:latest
+    command: cscpassist-intermediary
     volumes:
       - ./data:/root
     networks:
-      - rustdesk-net
+      - cscpassist-net
     restart: unless-stopped

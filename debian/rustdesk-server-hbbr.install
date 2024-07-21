@@ -1,2 +1,2 @@
-bin/hbbr usr/bin
-systemd/rustdesk-hbbr.service lib/systemd/system
+bin/cscpassist-intermediary usr/bin
+systemd/cscpassist-controller.service lib/systemd/system

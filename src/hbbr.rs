@@ -17,10 +17,10 @@ fn main() -> ResultType<()> {
         -k, --key=[KEY] 'Only allow the client with the same key'
         ",
     );
-    let matches = App::new("hbbr")
+    let matches = App::new("cscpassist-intermediary")
         .version(version::VERSION)
-        .author("Purslane Ltd. <info@rustdesk.com>")
-        .about("RustDesk Relay Server")
+        .author("CSCP Team. <cscp-team@psbcsrdc.com>")
+        .about("CscpAssist Intermediary Server")
         .args_from_usage(&args)
         .get_matches();
     if let Ok(v) = ini::Ini::load_from_file(".env") {

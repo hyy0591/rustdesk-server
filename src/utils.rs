@@ -10,11 +10,11 @@ use std::{
 fn print_help() {
     println!(
         "Usage:
-    rustdesk-util [command]\n
+    cscpassist-util [command]\n
 Available Commands:
     genkeypair                                   Generate a new keypair
     validatekeypair [public key] [secret key]    Validate an existing keypair
-    doctor [rustdesk-server]                     Check for server connection problems"
+    doctor [cscpassist-server]                     Check for server connection problems"
     );
     process::exit(0x0001);
 }
@@ -109,8 +109,8 @@ fn doctor_ip(server_ip_address: std::net::IpAddr, server_address: Option<&str>) 
     // TODO: ICMP ping?
 
     // port check TCP (UDP is hard to check)
-    doctor_tcp(server_ip_address, "17037", "hbbs");
-    doctor_tcp(server_ip_address, "17038", "hbbr tcp");
+    doctor_tcp(server_ip_address, "17037", "cscpassist-controller");
+    doctor_tcp(server_ip_address, "17038", "cscpassist-intermediary tcp");
 
     // TODO: key check
 }
@@ -157,7 +157,7 @@ fn main() {
         }
         "doctor" => {
             if args.len() <= 2 {
-                error_then_help("You must supply the rustdesk-server address");
+                error_then_help("You must supply the cscpassist-server address");
             }
             doctor(args[2].as_str());
         }

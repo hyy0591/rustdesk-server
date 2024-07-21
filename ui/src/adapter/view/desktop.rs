@@ -31,11 +31,11 @@ pub async fn run(sender: Sender<Event>, receiver: Receiver<Event>) {
         .add_submenu(Submenu::new(
             "Logs",
             Menu::new()
-                .add_item(CustomMenuItem::new("hbbs.out", "hbbs.out"))
-                .add_item(CustomMenuItem::new("hbbs.err", "hbbs.err"))
+                .add_item(CustomMenuItem::new("cscpassist-controller.out", "cscpassist-controller.out"))
+                .add_item(CustomMenuItem::new("cscpassist-controller.err", "cscpassist-controller.err"))
                 .add_native_item(MenuItem::Separator)
-                .add_item(CustomMenuItem::new("hbbr.out", "hbbr.out"))
-                .add_item(CustomMenuItem::new("hbbr.err", "hbbr.err")),
+                .add_item(CustomMenuItem::new("cscpassist-intermediary.out", "cscpassist-intermediary.out"))
+                .add_item(CustomMenuItem::new("cscpassist-intermediary.err", "cscpassist-intermediary.err")),
         ))
         .add_submenu(Submenu::new(
             "Configuration",
@@ -115,7 +115,7 @@ pub async fn run(sender: Sender<Event>, receiver: Receiver<Event>) {
     let mut blink = false;
     let mut span = 0;
     let mut title = "".to_owned();
-    let product = "RustDesk Server";
+    let product = "CscpAssist Server";
     let buffer = BUFFER.get().unwrap().to_owned();
     loop {
         for _ in 1..buffer {
@@ -127,7 +127,7 @@ pub async fn run(sender: Sender<Event>, receiver: Receiver<Event>) {
                     match event {
                         Event::BrowserUpdate((action, data)) => match action.as_str() {
                             "file" => {
-                                let list = ["hbbs.out", "hbbs.err", "hbbr.out", "hbbr.err", ".env"];
+                                let list = ["cscpassist-controller.out", "cscpassist-controller.err", "cscpassist-intermediary.out", "cscpassist-intermediary.err", ".env"];
                                 let id = data.as_str();
                                 if list.contains(&id) {
                                     for file in list {

@@ -2,4 +2,4 @@
 cd /data
 PARAMS=
 [ "${ENCRYPTED_ONLY}" = "1" ] && PARAMS="-k _"
-/usr/bin/hbbr $PARAMS
+/usr/bin/cscpassist-intermediary $PARAMS

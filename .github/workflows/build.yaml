@@ -62,9 +62,9 @@ jobs:
         with:
           name: binaries-linux-${{ matrix.job.name }}
           path: |
-            target/${{ matrix.job.target }}/release/hbbr
-            target/${{ matrix.job.target }}/release/hbbs
-            target/${{ matrix.job.target }}/release/rustdesk-utils
+            target/${{ matrix.job.target }}/release/cscpassist-intermediary
+            target/${{ matrix.job.target }}/release/cscpassist-controller
+            target/${{ matrix.job.target }}/release/cscpassist-utils
           if-no-files-found: error
 
   build-win:
@@ -131,7 +131,7 @@ jobs:
           mkdir setup\logs
           makensis /V1 setup.nsi
           mkdir SignOutput
-          mv RustDeskServer.Setup.exe SignOutput\
+          mv CscpAssistServer.Setup.exe SignOutput\
           mv ..\target\x86_64-pc-windows-msvc\release\*.exe SignOutput\
         working-directory: ./ui
 
@@ -150,10 +150,10 @@ jobs:
         with:
           name: binaries-windows-x86_64
           path: |
-            ui\SignOutput\hbbr.exe
-            ui\SignOutput\hbbs.exe
-            ui\SignOutput\rustdesk-utils.exe
-            ui\SignOutput\RustDeskServer.Setup.exe
+            ui\SignOutput\cscpassist-intermediary.exe
+            ui\SignOutput\cscpassist-controller.exe
+            ui\SignOutput\cscpassist-utils.exe
+            ui\SignOutput\CscpAssistServer.Setup.exe
           if-no-files-found: error
 
   # github (draft) release with all binaries

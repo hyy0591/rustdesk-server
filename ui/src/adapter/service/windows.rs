@@ -18,15 +18,15 @@ impl IDesktopService for WindowsDesktopService {
         call(
             [
                 "echo.",
-                "%nssm% stop hbbr",
-                "%nssm% remove hbbr confirm",
-                "%nssm% stop hbbs",
-                "%nssm% remove hbbs confirm",
+                "%nssm% stop cscpassist-intermediary",
+                "%nssm% remove cscpassist-intermediary confirm",
+                "%nssm% stop cscpassist-controller",
+                "%nssm% remove cscpassist-controller confirm",
                 "mkdir logs",
                 "echo.",
-                "service\\run.cmd hbbs",
+                "service\\run.cmd cscpassist-controller",
                 "echo.",
-                "service\\run.cmd hbbr",
+                "service\\run.cmd cscpassist-intermediary",
                 "echo.",
                 "@ping 127.1 -n 3 >nul",
             ]
@@ -38,11 +38,11 @@ impl IDesktopService for WindowsDesktopService {
         call(
             [
                 "echo.",
-                "%nssm% stop hbbr",
-                "%nssm% remove hbbr confirm",
+                "%nssm% stop cscpassist-intermediary",
+                "%nssm% remove cscpassist-intermediary confirm",
                 "echo.",
-                "%nssm% stop hbbs",
-                "%nssm% remove hbbs confirm",
+                "%nssm% stop cscpassist-controller",
+                "%nssm% remove cscpassist-controller confirm",
                 "echo.",
                 "@ping 127.1 -n 3 >nul",
             ]
@@ -51,17 +51,17 @@ impl IDesktopService for WindowsDesktopService {
         self.check();
     }
     fn restart(&mut self) {
-        nssm(["restart", "hbbs"].map(|x| x.to_owned()));
-        nssm(["restart", "hbbr"].map(|x| x.to_owned()));
+        nssm(["restart", "cscpassist-controller"].map(|x| x.to_owned()));
+        nssm(["restart", "cscpassist-intermediary"].map(|x| x.to_owned()));
         self.check();
     }
     fn pause(&mut self) {
         call(
             [
                 "echo.",
-                "%nssm% stop hbbr",
+                "%nssm% stop cscpassist-intermediary",
                 "echo.",
-                "%nssm% stop hbbs",
+                "%nssm% stop cscpassist-controller",
                 "echo.",
                 "@ping 127.1 -n 3 >nul",
             ]
@@ -70,7 +70,7 @@ impl IDesktopService for WindowsDesktopService {
         self.check();
     }
     fn check(&mut self) -> DesktopServiceState {
-        self.state = match service_status("hbbs").as_str() {
+        self.state = match service_status("cscpassist-controller").as_str() {
             "Running" => DesktopServiceState::Started,
             // "Stopped" => DeskServerServiceState::Paused,
             _ => DesktopServiceState::Stopped,

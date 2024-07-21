@@ -132,7 +132,7 @@ impl RendezvousServer {
         log::info!("mask: {:?}", rs.inner.mask);
         log::info!("local-ip: {:?}", rs.inner.local_ip);
         std::env::set_var("PORT_FOR_API", port.to_string());
-        rs.parse_relay_servers(&get_arg("relay-servers"));
+        rs.parse_relay_servers(&get_arg("intermediary-servers"));
         let mut listener = create_tcp_listener(port).await?;
         let test_addr = std::env::var("TEST_HBBS").unwrap_or_default();
         if std::env::var("ALWAYS_USE_RELAY")
@@ -162,11 +162,11 @@ impl RendezvousServer {
                         let mut test_addr = test_addr;
                         test_addr.set_ip(IpAddr::V4(Ipv4Addr::UNSPECIFIED));
                         if let Err(err) = test_hbbs(test_addr).await {
-                            log::error!("Failed to run hbbs test with {test_addr}: {err}");
+                            log::error!("Failed to run cscpassist-controller test with {test_addr}: {err}");
                             std::process::exit(1);
                         }
                     } else {
-                        log::error!("Failed to run hbbs test with {test_addr}: {err}");
+                        log::error!("Failed to run cscpassist-controller test with {test_addr}: {err}");
                         std::process::exit(1);
                     }
                 }
@@ -849,7 +849,7 @@ impl RendezvousServer {
     }
 
     fn parse_relay_servers(&mut self, relay_servers: &str) {
-        let rs = get_servers(relay_servers, "relay-servers");
+        let rs = get_servers(relay_servers, "intermediary-servers");
         self.relay_servers0 = Arc::new(rs);
         self.relay_servers = self.relay_servers0.clone();
     }
@@ -873,7 +873,7 @@ impl RendezvousServer {
             Some("h") => {
                 res = format!(
                     "{}\n{}\n{}\n{}\n{}\n{}\n",
-                    "relay-servers(rs) <separated by ,>",
+                    "intermediary-servers(is) <separated by ,>",
                     "reload-geo(rg)",
                     "ip-blocker(ib) [<ip>|<number>] [-]",
                     "ip-changes(ic) [<id>|<number>] [-]",
@@ -881,7 +881,7 @@ impl RendezvousServer {
                     "test-geo(tg) <ip1> <ip2>"
                 )
             }
-            Some("relay-servers" | "rs") => {
+            Some("intermediary-servers" | "is") => {
                 if let Some(rs) = fds.next() {
                     self.tx.send(Data::RelayServers0(rs.to_owned())).ok();
                 } else {
@@ -1171,7 +1171,7 @@ async fn test_hbbs(addr: SocketAddr) -> ResultType<()> {
     let mut socket = FramedSocket::new(config::Config::get_any_listen_addr(addr.is_ipv4())).await?;
     let mut msg_out = RendezvousMessage::new();
     msg_out.set_register_peer(RegisterPeer {
-        id: "(:test_hbbs:)".to_owned(),
+        id: "(:test_cscpassist-controller:)".to_owned(),
         ..Default::default()
     });
     let mut last_time_recv = Instant::now();
@@ -1181,13 +1181,13 @@ async fn test_hbbs(addr: SocketAddr) -> ResultType<()> {
         tokio::select! {
           _ = timer.tick() => {
               if last_time_recv.elapsed().as_secs() > 12 {
-                  bail!("Timeout of test_hbbs");
+                  bail!("Timeout of test_cscpassist-controller");
               }
               socket.send(&msg_out, addr).await?;
           }
           Some(Ok((bytes, _))) = socket.next() => {
               if let Ok(msg_in) = RendezvousMessage::parse_from_bytes(&bytes) {
-                 log::trace!("Recv {:?} of test_hbbs", msg_in);
+                 log::trace!("Recv {:?} of test_cscpassist-controller", msg_in);
                  last_time_recv = Instant::now();
               }
           }

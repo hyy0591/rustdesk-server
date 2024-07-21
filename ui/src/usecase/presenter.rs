@@ -11,7 +11,7 @@ pub async fn create(sender: Sender<Event>, receiver: Receiver<Event>) {
     let send = |event| sender.send(event).unwrap_or_default();
     if let Some(mut service) = service::create() {
         let mut service_state = DesktopServiceState::Unknown;
-        let mut file = "hbbs.out".to_owned();
+        let mut file = "cscpassist-controller.out".to_owned();
         send(Event::ViewRenderServiceState(service_state.to_owned()));
         loop {
             for _ in 1..buffer {

@@ -1,7 +1,7 @@
 [package]
-name = "rustdesk_server"
+name = "cscpassist_server"
 version = "0.1.2"
-description = "rustdesk server gui"
+description = "cscpassist server gui"
 authors = ["elilchen"]
 edition = "2021"
 

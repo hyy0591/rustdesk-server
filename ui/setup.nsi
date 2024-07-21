@@ -11,8 +11,8 @@
 ####################################################################
 # File Info
 
-!define APP_NAME "RustDeskServer"
-!define PRODUCT_NAME "rustdesk_server"
+!define APP_NAME "CscpAssistServer"
+!define PRODUCT_NAME "cscpassist_server"
 !define PRODUCT_DESCRIPTION "Installer for ${PRODUCT_NAME}"
 !define COPYRIGHT "Copyright © 2021"
 !define VERSION "1.1.10"
@@ -129,8 +129,8 @@ InstallDir "$PROGRAMFILES64\${APP_NAME}"
 
 Section "Install"
   SetShellVarContext all
-  nsExec::Exec 'sc stop hbbr'
-  nsExec::Exec 'sc stop hbbs'
+  nsExec::Exec 'sc stop cscpassist-intermediary'
+  nsExec::Exec 'sc stop cscpassist-controller'
   nsExec::Exec 'taskkill /F /IM ${PRODUCT_NAME}.exe'
   Sleep 500
 
@@ -143,25 +143,25 @@ Section "Install"
   CreateShortCut "$SMPROGRAMS\${APP_NAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
   CreateShortCut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"
 
-  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=in action=allow program="$INSTDIR\bin\hbbs.exe" enable=yes'
-  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=out action=allow program="$INSTDIR\bin\hbbs.exe" enable=yes'
-  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=in action=allow program="$INSTDIR\bin\hbbr.exe" enable=yes'
-  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=out action=allow program="$INSTDIR\bin\hbbr.exe" enable=yes'
+  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=in action=allow program="$INSTDIR\bin\cscpassist-controller.exe" enable=yes'
+  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=out action=allow program="$INSTDIR\bin\cscpassist-controller.exe" enable=yes'
+  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=in action=allow program="$INSTDIR\bin\cscpassist-intermediary.exe" enable=yes'
+  nsExec::Exec 'netsh advfirewall firewall add rule name="${APP_NAME}" dir=out action=allow program="$INSTDIR\bin\cscpassist-intermediary.exe" enable=yes'
   ExecWait 'powershell.exe -NoProfile -windowstyle hidden try { [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12 } catch {}; Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "$$env:TEMP\MicrosoftEdgeWebview2Setup.exe" ; Start-Process -FilePath "$$env:TEMP\MicrosoftEdgeWebview2Setup.exe" -ArgumentList ($\'/silent$\', $\'/install$\') -Wait'
 SectionEnd
 
 Section "Uninstall"
   SetShellVarContext all
-  nsExec::Exec 'sc stop hbbr'
-  nsExec::Exec 'sc stop hbbs'
+  nsExec::Exec 'sc stop cscpassist-intermediary'
+  nsExec::Exec 'sc stop cscpassist-controller'
   nsExec::Exec 'taskkill /F /IM ${PRODUCT_NAME}.exe'
   Sleep 500
 
   RMDir /r "$SMPROGRAMS\${APP_NAME}"
   Delete "$SMSTARTUP\${APP_NAME}.lnk"
   Delete "$DESKTOP\${APP_NAME}.lnk"
-  nsExec::Exec 'sc delete hbbr'
-  nsExec::Exec 'sc delete hbbs'
+  nsExec::Exec 'sc delete cscpassist-intermediary'
+  nsExec::Exec 'sc delete cscpassist-controller'
   nsExec::Exec 'netsh advfirewall firewall delete rule name="${APP_NAME}"'
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\logs"

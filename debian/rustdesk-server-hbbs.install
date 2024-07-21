@@ -1,2 +1,2 @@
-bin/hbbs usr/bin
-systemd/rustdesk-hbbs.service lib/systemd/system
+bin/cscpassist-controller usr/bin
+systemd/cscpassist-controller.service lib/systemd/system

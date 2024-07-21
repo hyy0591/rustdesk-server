@@ -1,17 +1,17 @@
 
 [Unit]
-Description=Rustdesk Relay Server
+Description=CscpAssist Intermediary Server
 
 [Service]
 Type=simple
 LimitNOFILE=1000000
-ExecStart=/usr/bin/hbbr
-WorkingDirectory=/var/lib/rustdesk-server/
+ExecStart=/usr/bin/cscpassist-intermediary
+WorkingDirectory=/var/lib/cscpassist-server/
 User=
 Group=
 Restart=always
-StandardOutput=append:/var/log/rustdesk-server/hbbr.log
-StandardError=append:/var/log/rustdesk-server/hbbr.error
+StandardOutput=append:/var/log/cscpassist-server/cscpassist-intermediary.log
+StandardError=append:/var/log/cscpassist-server/cscpassist-intermediary.error
 # Restart service after 10 seconds if node service crashes
 RestartSec=10
 
