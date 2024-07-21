@@ -778,7 +778,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cscpassist-controller"
+name = "cscpassist_controller"
 version = "1.1.11-1"
 dependencies = [
  "async-speed-limit",

@@ -55,7 +55,11 @@ jobs:
           use-cross: true  
 
       - name: Exec chmod
-        run: chmod -v a+x target/${{ matrix.job.target }}/release/*
+        run: |
+          mv target/${{ matrix.job.target }}/release/cscpassist_controller target/${{ matrix.job.target }}/release/cscpassist-controller
+          mv target/${{ matrix.job.target }}/release/cscpassist_intermediary target/${{ matrix.job.target }}/release/cscpassist-intermediary
+          mv target/${{ matrix.job.target }}/release/cscpassist_utils target/${{ matrix.job.target }}/release/cscpassist_utils
+          chmod -v a+x target/${{ matrix.job.target }}/release/*
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
@@ -92,6 +96,12 @@ jobs:
           command: build
           args: --release --all-features --target=x86_64-pc-windows-msvc
           use-cross: true
+
+      - name: Rename binary
+        run: |
+          move target/${{ matrix.job.target }}/release/cscpassist_controller.exe target/${{ matrix.job.target }}/release/cscpassist-controller.exe
+          move target/${{ matrix.job.target }}/release/cscpassist_intermediary.exe target/${{ matrix.job.target }}/release/cscpassist-intermediary.exe
+          move target/${{ matrix.job.target }}/release/cscpassist_utils.exe target/${{ matrix.job.target }}/release/cscpassist_utils.exe
 
       - name: Install NSIS
         run: |

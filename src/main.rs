@@ -3,7 +3,7 @@
 
 use flexi_logger::*;
 use hbb_common::{bail, config::RENDEZVOUS_PORT, ResultType};
-use hbbs::{common::*, *};
+use cscpassist_controller::{common::*, *};
 
 const RMEM: usize = 0;
 

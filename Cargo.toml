@@ -1,5 +1,5 @@
 [package]
-name = "cscpassist-controller"
+name = "cscpassist_controller"
 version = "1.1.11-1"
 authors = ["cscpassist <cscp-team@psbcsrdc.com>"]
 edition = "2021"
@@ -7,11 +7,11 @@ build = "build.rs"
 default-run = "cscpassist-controller"
 
 [[bin]]
-name = "cscpassist-intermediary"
-path = "src/cscpassist-intermediary.rs"
+name = "cscpassist_intermediary"
+path = "src/hbbr.rs"
 
 [[bin]]
-name = "cscpassist-utils"
+name = "cscpassist_utils"
 path = "src/utils.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
