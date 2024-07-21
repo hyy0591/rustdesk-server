@@ -4,7 +4,7 @@ version = "1.1.11-1"
 authors = ["cscpassist <cscp-team@psbcsrdc.com>"]
 edition = "2021"
 build = "build.rs"
-default-run = "cscpassist-controller"
+default-run = "cscpassist_controller"
 
 [[bin]]
 name = "cscpassist_intermediary"
