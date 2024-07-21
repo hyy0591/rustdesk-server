@@ -58,7 +58,7 @@ jobs:
         run: |
           mv target/${{ matrix.job.target }}/release/cscpassist_controller target/${{ matrix.job.target }}/release/cscpassist-controller
           mv target/${{ matrix.job.target }}/release/cscpassist_intermediary target/${{ matrix.job.target }}/release/cscpassist-intermediary
-          mv target/${{ matrix.job.target }}/release/cscpassist_utils target/${{ matrix.job.target }}/release/cscpassist_utils
+          mv target/${{ matrix.job.target }}/release/cscpassist_utils target/${{ matrix.job.target }}/release/cscpassist-utils
           chmod -v a+x target/${{ matrix.job.target }}/release/*
 
       - name: Publish Artifacts
@@ -101,7 +101,7 @@ jobs:
         run: |
           move target/${{ matrix.job.target }}/release/cscpassist_controller.exe target/${{ matrix.job.target }}/release/cscpassist-controller.exe
           move target/${{ matrix.job.target }}/release/cscpassist_intermediary.exe target/${{ matrix.job.target }}/release/cscpassist-intermediary.exe
-          move target/${{ matrix.job.target }}/release/cscpassist_utils.exe target/${{ matrix.job.target }}/release/cscpassist_utils.exe
+          move target/${{ matrix.job.target }}/release/cscpassist_utils.exe target/${{ matrix.job.target }}/release/cscpassist-utils.exe
 
       - name: Install NSIS
         run: |
