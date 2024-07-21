@@ -99,9 +99,9 @@ jobs:
 
       - name: Rename binary
         run: |
-          move target\${{ matrix.job.target }}\release\cscpassist_controller.exe target\${{ matrix.job.target }}\release\cscpassist-controller.exe
-          move target\${{ matrix.job.target }}\release\cscpassist_intermediary.exe target\${{ matrix.job.target }}\release\cscpassist-intermediary.exe
-          move target\${{ matrix.job.target }}\release\cscpassist_utils.exe target\${{ matrix.job.target }}\release\cscpassist-utils.exe
+          move target\x86_64-pc-windows-msvc\release\cscpassist_controller.exe target\x86_64-pc-windows-msvc\release\cscpassist-controller.exe
+          move target\x86_64-pc-windows-msvc\release\cscpassist_intermediary.exe target\x86_64-pc-windows-msvc\release\cscpassist-intermediary.exe
+          move target\x86_64-pc-windows-msvc\release\cscpassist_utils.exe target\x86_64-pc-windows-msvc\release\cscpassist-utils.exe
 
       - name: Install NSIS
         run: |
